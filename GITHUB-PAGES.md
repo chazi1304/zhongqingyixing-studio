@@ -45,7 +45,7 @@ https://<你的 GitHub 用户名>.github.io/zhongqingyixing-studio/
 index.html
 assets/
 about.html
-research.html
+practice.html
 ...
 ```
 

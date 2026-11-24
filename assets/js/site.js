@@ -79,24 +79,21 @@
 
   const searchIndex = [
     { href: "index.html", label: "首页", group: "页面", title: "在真实世界里做研究，让实践留下作品" },
-    { href: "index.html#featured", label: "代表案例", group: "首页", title: "乡土诗歌课程 → 孩童诗集 → 实践地影像 / 3D" },
-    { href: "research.html", label: "科研创新", group: "页面", title: "把问题变成方案" },
-    { href: "research.html#competition", label: "竞赛风采", group: "科研创新", title: "竞赛项目、团队与过程故事" },
-    { href: "research.html#blog", label: "技术博客", group: "科研创新", title: "技术方案、工具教程与项目复盘" },
-    { href: "research.html#innovation", label: "大创项目", group: "科研创新", title: "大创项目与可公开成果" },
-    { href: "research.html#open-source", label: "开源贡献", group: "科研创新", title: "仓库、工具与贡献指南" },
-    { href: "practice.html", label: "实践项目", group: "页面", title: "把方案带到现场" },
+    { href: "index.html#featured", label: "首发案例", group: "首页", title: "三个代表案例，横向自动轮播" },
+    { href: "index.html#news", label: "知情意行动态", group: "首页", title: "竖向滚动的工作室日志" },
+    { href: "practice.html", label: "实践项目", group: "页面", title: "实践地图与项目档案" },
     { href: "practice.html#projects", label: "项目列表", group: "实践项目", title: "按年份、实践地与主题浏览" },
     { href: "practice.html#archive", label: "实践地档案", group: "实践项目", title: "把多次记录聚在一起" },
     { href: "practice.html#stories", label: "实践故事", group: "实践项目", title: "支教日记、人物与实践点滴" },
-    { href: "outcomes.html", label: "成果专题", group: "页面", title: "把现场变成作品" },
+    { href: "outcomes.html", label: "成果专题", group: "页面", title: "旗舰专题与专题列表" },
     { href: "outcomes.html#poetry", label: "乡土诗集", group: "成果专题", title: "旗舰专题位" },
     { href: "outcomes.html#specials", label: "专题列表", group: "成果专题", title: "诗集、影像、3D、知芽 IP 与展览" },
     { href: "about.html", label: "关于知情意行", group: "页面", title: "谁在做，为什么做" },
-    { href: "about.html#story", label: "工作室概况", group: "关于知情意行", title: "我们相信的事与工作方式" },
-    { href: "about.html#people", label: "团队与人物", group: "关于知情意行", title: "指导老师、核心团队、成员与校友" },
+    { href: "about.html#story", label: "工作室介绍", group: "关于知情意行", title: "我们相信的事与工作方式" },
+    { href: "about.html#departments", label: "部门介绍", group: "关于知情意行", title: "知芽工作部、心焰融媒部、意炬先锋部、萤光知行部、青蓝研创中心" },
+    { href: "about.html#people", label: "团队与任务", group: "关于知情意行", title: "指导老师、核心团队、部门负责人、成员与校友" },
     { href: "about.html#honors", label: "过往荣誉", group: "关于知情意行", title: "按年份整理的荣誉索引" },
-    { href: "about.html#ip", label: "知芽 IP", group: "关于知情意行", title: "形象、故事与使用规范" },
+    { href: "about.html#notes", label: "工作室日志", group: "关于知情意行", title: "培训、试讲、团队日常与公告" },
     { href: "join.html", label: "加入我们", group: "页面", title: "一起做一件能留下来的事" },
     { href: "join.html#opportunities", label: "当前机会", group: "加入我们", title: "招新、志愿、活动与讲座" },
     { href: "join.html#roles", label: "角色", group: "加入我们", title: "内容、设计、技术、运营、影像、研究" },
@@ -104,7 +101,7 @@
     { href: "join.html#cooperation", label: "校企合作", group: "加入我们", title: "项目合作、实习基地、共建课程" },
     { href: "project-detail.html", label: "项目详情模板", group: "模板", title: "背景、行动、留下、故事、成果、参与" },
     { href: "special-detail.html", label: "专题详情模板", group: "模板", title: "策展前言、章节、来源实践与分享" },
-    { href: "article-detail.html", label: "文章详情模板", group: "模板", title: "技术博客、竞赛故事、支教日记与实践记录" }
+    { href: "article-detail.html", label: "文章详情模板", group: "模板", title: "技术博客、支教日记与实践记录" }
   ];
 
   function renderSearch(query) {
@@ -117,7 +114,7 @@
       : searchIndex.slice(0, 8);
 
     if (!items.length) {
-      searchResults.innerHTML = '<p class="search-empty">没有找到匹配的栏目。试试“实践”“科研”“加入”或“专题”。</p>';
+      searchResults.innerHTML = '<p class="search-empty">没有找到匹配的栏目。试试“实践”“部门”“加入”或“专题”。</p>';
       return;
     }
 
@@ -248,6 +245,131 @@
       }
       form.reset();
     });
+  });
+
+  /* ---------- case carousel ---------- */
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll("[data-carousel]").forEach(function (root) {
+    const track = root.querySelector("[data-carousel-track]");
+    const slides = track ? Array.from(track.children) : [];
+    const prev = root.querySelector("[data-carousel-prev]");
+    const next = root.querySelector("[data-carousel-next]");
+    const count = root.querySelector("[data-carousel-count]");
+    const dots = Array.from(root.querySelectorAll("[data-carousel-dot]"));
+    if (!track || slides.length < 2) return;
+
+    let index = 0;
+    let timer = null;
+
+    function pad(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    function go(nextIndex) {
+      index = (nextIndex + slides.length) % slides.length;
+      track.style.transform = "translateX(-" + index * 100 + "%)";
+      if (count) count.textContent = pad(index + 1) + " / " + pad(slides.length);
+      dots.forEach(function (dot, dotIndex) {
+        dot.classList.toggle("is-active", dotIndex === index);
+        dot.setAttribute("aria-current", dotIndex === index ? "true" : "false");
+      });
+    }
+
+    function stop() {
+      if (timer) {
+        window.clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    function start() {
+      stop();
+      if (reduceMotion) return;
+      timer = window.setInterval(function () {
+        go(index + 1);
+      }, 5500);
+    }
+
+    if (prev) prev.addEventListener("click", function () { go(index - 1); start(); });
+    if (next) next.addEventListener("click", function () { go(index + 1); start(); });
+    dots.forEach(function (dot, dotIndex) {
+      dot.addEventListener("click", function () { go(dotIndex); start(); });
+    });
+
+    root.addEventListener("mouseenter", stop);
+    root.addEventListener("mouseleave", start);
+    root.addEventListener("focusin", stop);
+    root.addEventListener("focusout", function (event) {
+      if (!root.contains(event.relatedTarget)) start();
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) stop();
+      else start();
+    });
+
+    go(0);
+    start();
+  });
+
+  /* ---------- vertical news ticker ---------- */
+
+  document.querySelectorAll("[data-ticker]").forEach(function (root) {
+    const track = root.querySelector("[data-ticker-track]");
+    const items = track ? Array.from(track.children) : [];
+    const visible = Number(root.dataset.visible || 4);
+    if (!track || items.length <= visible) return;
+
+    let index = 0;
+    let timer = null;
+
+    function rowHeight() {
+      return items[0] ? items[0].getBoundingClientRect().height : 54;
+    }
+
+    function go(nextIndex) {
+      index = nextIndex;
+      track.style.transform = "translateY(-" + index * rowHeight() + "px)";
+    }
+
+    function stop() {
+      if (timer) {
+        window.clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    function start() {
+      stop();
+      if (reduceMotion) return;
+      timer = window.setInterval(function () {
+        const maxIndex = Math.max(0, items.length - visible);
+        if (index >= maxIndex) {
+          track.style.transition = "none";
+          go(0);
+          // Restore the transition after the jump.
+          window.requestAnimationFrame(function () {
+            track.style.transition = "";
+          });
+        } else {
+          go(index + 1);
+        }
+      }, 3800);
+    }
+
+    root.addEventListener("mouseenter", stop);
+    root.addEventListener("mouseleave", start);
+    root.addEventListener("focusin", stop);
+    root.addEventListener("focusout", function (event) {
+      if (!root.contains(event.relatedTarget)) start();
+    });
+    window.addEventListener("resize", function () {
+      go(index);
+    });
+
+    go(0);
+    start();
   });
 
   /* ---------- current year ---------- */
